@@ -60,6 +60,7 @@ function ArchivePage() {
                     onError={(e) => {
                       e.currentTarget.style.display = 'none';
                     }}
+                    referrerPolicy="no-referrer"
                   />
                 )}
               </div>

@@ -65,12 +65,12 @@ function AboutPage() {
               key={member.id}
               className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow"
             >
-              <div className="aspect-square overflow-hidden bg-gradient-to-br from-gray-200 to-gray-400">
+              <div className="md:aspect-square overflow-hidden bg-gradient-to-br from-gray-200 to-gray-400">
                 {member.image && (
                   <img
                     src={member.image}
                     alt={member.name}
-                    className="w-full h-full object-cover"
+                    className="w-full object-contain md:h-full md:object-cover"
                   />
                 )}
               </div>

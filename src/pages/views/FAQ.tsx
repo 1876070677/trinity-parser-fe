@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
-import { faqs } from '@/common/const';
+import { FAQS } from '@/common/const';
 
 function FAQ() {
   const [openId, setOpenId] = useState<number | null>(null);
@@ -12,7 +12,7 @@ function FAQ() {
   return (
     <div className="space-y-4 p-1 pr-3">
       <div className="space-y-2">
-        {faqs.map((faq, index) => (
+        {FAQS.map((faq, index) => (
           <div
             key={index}
             className="border border-gray-200 rounded-lg"

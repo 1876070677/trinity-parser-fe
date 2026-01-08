@@ -71,7 +71,7 @@ function LoginPage() {
             <div className="inline-flex items-center justify-center w-16 h-16 bg-foreground rounded-full mb-4">
               <GraduationCap className="w-8 h-8 text-white" />
             </div>
-            <h1 className="text-gray-900 mb-2">Trinity Parser</h1>
+            <div className="text-3xl text-gray-900 mb-2">Trinity Parser</div>
             <p className={`text-gray-600 transition-opacity ${loginCount ? 'opacity-100' : 'opacity-0'}`}>
               {animatedCount.toLocaleString()}명이 선택한
             </p>

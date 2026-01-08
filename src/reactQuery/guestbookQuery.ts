@@ -72,8 +72,23 @@ export const useLikePost = () => {
 
   return useMutation({
     mutationFn: likePost,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['posts'] });
+    onSuccess: (_, id) => {
+      queryClient.setQueryData<{ pages: ListPostsResponseDto[]; pageParams: (string | undefined)[] }>(
+        ['posts'],
+        (oldData) => {
+          if (!oldData) return oldData;
+
+          return {
+            ...oldData,
+            pages: oldData.pages.map((page) => ({
+              ...page,
+              data: page.data.map((post) =>
+                post.id === id ? { ...post, likes: post.likes + 1 } : post
+              ),
+            })),
+          };
+        }
+      );
     },
   });
 };
@@ -99,7 +114,7 @@ export const useCreatePost = () => {
   return useMutation({
     mutationFn: createPost,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['posts'] });
+      queryClient.resetQueries({ queryKey: ['posts'] });
     },
   });
 };

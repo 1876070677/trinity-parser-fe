@@ -60,7 +60,7 @@ function DashboardPage() {
           <div className="bg-white rounded-lg border border-gray-200 p-6 overflow-hidden flex flex-col">
             <div className="flex items-center gap-2 mb-4 shrink-0">
               <BookOpen className="w-5 h-5 text-blue-600" />
-              <h2 className="text-gray-900">수강 과목</h2>
+              <div className="text-2xl text-gray-900">수강 과목</div>
             </div>
             <ScrollArea className="flex-1 h-0">
               <CourseList />
@@ -71,7 +71,7 @@ function DashboardPage() {
           <div className="bg-white rounded-lg border border-gray-200 p-6 overflow-hidden flex flex-col">
             <div className="flex items-center gap-2 mb-4 shrink-0">
               <Award className="w-5 h-5 text-green-600" />
-              <h2 className="text-gray-900">성적</h2>
+              <div className="text-2xl text-gray-900">성적</div>
             </div>
             <ScrollArea className="flex-1 h-0">
               <Grades />
@@ -82,7 +82,7 @@ function DashboardPage() {
           <div className="bg-white rounded-lg border border-gray-200 p-6 overflow-hidden flex flex-col">
             <div className="flex items-center gap-2 mb-4 shrink-0">
               <MessageSquare className="w-5 h-5 text-purple-600" />
-              <h2 className="text-gray-900">방명록</h2>
+              <div className="text-2xl text-gray-900">방명록</div>
             </div>
             <ScrollArea className="flex-1 h-0">
               <Guestbook />
@@ -93,7 +93,7 @@ function DashboardPage() {
           <div className="bg-white rounded-lg border border-gray-200 p-6 overflow-hidden flex flex-col">
             <div className="flex items-center gap-2 mb-4 shrink-0">
               <HelpCircle className="w-5 h-5 text-orange-600" />
-              <h2 className="text-gray-900">FAQ</h2>
+              <div className="text-2xl text-gray-900">FAQ</div>
             </div>
             <ScrollArea className="flex-1 h-0">
               <FAQ />

@@ -1,8 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
-import { usePosts, useLikePost, useCreatePost } from '@/reactQuery/guestbookQuery';
 import { Heart, Send } from 'lucide-react';
+
+import { usePosts, useLikePost, useCreatePost } from '@/reactQuery/guestbookQuery';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 function Guestbook() {
   const [newMessage, setNewMessage] = useState('');
@@ -81,7 +83,10 @@ function Guestbook() {
           >
             <div className="flex items-start justify-between mb-2">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-purple-400 rounded-full flex items-center justify-center text-white text-sm">
+                <div className={cn(
+                  "w-8 h-8 rounded-full flex items-center justify-center text-white text-sm",
+                  post.isAdmin ? 'bg-gradient-to-br from-blue-400 to-purple-400' : 'bg-primary'
+                  )}>
                   ?
                 </div>
                 <div>

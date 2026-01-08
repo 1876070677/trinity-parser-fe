@@ -114,7 +114,7 @@ function CourseList() {
                     {subject.sustCd}
                   </span>
                 </div>
-                <h3 className="text-gray-900 mt-1">{subject.sbjtKorNm}</h3>
+                <div className="text-xl text-gray-900 mt-1">{subject.sbjtKorNm}</div>
               </div>
               <div className="flex gap-1">
                 <Button

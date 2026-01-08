@@ -21,7 +21,7 @@ export default defineConfig(({ mode }) => {
         },
         proxy: {
           '/api': {
-            target: 'http://trinity.dobby.kr',
+            target: 'https://trinity.dobby.kr',
             changeOrigin: true,
             secure: false,
           }

@@ -55,7 +55,7 @@ function DashboardPage() {
       </div>
 
       <div className="hidden md:block max-w-7xl mx-auto px-6 py-8 h-full">
-        <div className="grid grid-cols-3 gap-6 h-full">
+        <div className="grid grid-cols-3 grid-rows-[7fr_3fr] gap-6 h-full">
           {/* Courses Section */}
           <div className="bg-white rounded-lg border border-gray-200 p-6 overflow-hidden flex flex-col">
             <div className="flex items-center gap-2 mb-4 shrink-0">

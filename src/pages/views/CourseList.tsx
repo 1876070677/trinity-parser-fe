@@ -81,13 +81,13 @@ function CourseList() {
             placeholder="과목 코드"
             value={sujtNo}
             onChange={(e) => setSujtNo(e.target.value)}
-            className="flex-1"
+            className="flex-[2]"
           />
           <Input
             placeholder="분반"
             value={classNo}
             onChange={(e) => setClassNo(e.target.value)}
-            className="w-24"
+            className="flex-1"
           />
           <Button type="submit" disabled={isPending}>
             {isPending ? '조회중...' : '조회'}

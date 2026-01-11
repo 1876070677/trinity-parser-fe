@@ -55,7 +55,7 @@ function DashboardPage() {
       </div>
 
       <div className="hidden md:block max-w-7xl mx-auto px-6 py-8 h-full">
-        <div className="grid grid-cols-2 grid-rows-2 gap-6 h-full">
+        <div className="grid grid-cols-3 gap-6 h-full">
           {/* Courses Section */}
           <div className="bg-white rounded-lg border border-gray-200 p-6 overflow-hidden flex flex-col">
             <div className="flex items-center gap-2 mb-4 shrink-0">
@@ -78,8 +78,8 @@ function DashboardPage() {
             </ScrollArea>
           </div>
 
-          {/* Guestbook Section */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6 overflow-hidden flex flex-col">
+          {/* Guestbook Section - Spans 2 rows */}
+          <div className="bg-white rounded-lg border border-gray-200 p-6 row-span-2 overflow-hidden flex flex-col">
             <div className="flex items-center gap-2 mb-4 shrink-0">
               <MessageSquare className="w-5 h-5 text-purple-600" />
               <div className="text-2xl text-gray-900">방명록</div>
@@ -89,8 +89,8 @@ function DashboardPage() {
             </ScrollArea>
           </div>
 
-          {/* FAQ Section */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6 overflow-hidden flex flex-col">
+          {/* FAQ Section - Spans 2 columns */}
+          <div className="bg-white rounded-lg border border-gray-200 p-6 col-span-2 overflow-hidden flex flex-col">
             <div className="flex items-center gap-2 mb-4 shrink-0">
               <HelpCircle className="w-5 h-5 text-orange-600" />
               <div className="text-2xl text-gray-900">FAQ</div>

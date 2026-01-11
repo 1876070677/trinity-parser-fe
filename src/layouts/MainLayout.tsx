@@ -47,7 +47,7 @@ function MainLayout() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-6">
               <div>
-                <div className="text-2xl text-gray-900">Trintiy Parser</div>
+                <div className="text-2xl text-gray-900">Trinity Parser</div>
                 <p className="text-sm text-gray-500 mt-1">{`${userInfo?.userNm}님, 환영합니다.`}</p>
               </div>
               <nav className="hidden lg:flex items-center gap-1 ml-8">

@@ -4,6 +4,7 @@ import CourseList from '@/pages/views/CourseList';
 import Grades from '@/pages/views/Grades';
 import Guestbook from '@/pages/views/Guestbook';
 import FAQ from '@/pages/views/FAQ';
+import NoticeBanner from '@/pages/views/NoticeBanner';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useState } from 'react';
 
@@ -20,6 +21,8 @@ function DashboardPage() {
 
   return (
     <div className="h-full flex flex-col">
+      <NoticeBanner />
+
       <nav className="md:hidden bg-white border-b border-gray-200 shrink-0">
         <div className="flex">
           {TABS.map((tab) => {

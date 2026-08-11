@@ -2,27 +2,16 @@ import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-q
 
 import { BASE_URL } from '@/common/const';
 import { throwIfNotOk } from '@/lib/httpError';
+import { ListPostsResponseDto } from '@/common/types/board';
 
 const getAuthHeader = (): Record<string, string> => {
   const token = localStorage.getItem('accessToken');
   return token ? { Authorization: `Bearer ${token}` } : {};
 };
 
-export interface PostItem {
-  id: string;
-  stdNo: string;
-  content: string;
-  createdAt: Date;
-  isAdmin: boolean;
+interface LikePostResponseDto {
+  success: boolean;
   likes: number;
-}
-
-export interface ListPostsResponseDto {
-  data: PostItem[];
-  meta: {
-    hasNextPage: boolean;
-    nextCursor: string | null;
-  };
 }
 
 const fetchPosts = async (cursor?: string): Promise<ListPostsResponseDto> => {
@@ -52,7 +41,7 @@ export const usePosts = () => {
   });
 };
 
-const likePost = async (id: string) => {
+const likePost = async (id: string): Promise<LikePostResponseDto> => {
   const res = await fetch(`${BASE_URL}/api/vl/like`, {
     method: 'POST',
     headers: {
@@ -72,7 +61,7 @@ export const useLikePost = () => {
 
   return useMutation({
     mutationFn: likePost,
-    onSuccess: (_, id) => {
+    onSuccess: (data, id) => {
       queryClient.setQueryData<{ pages: ListPostsResponseDto[]; pageParams: (string | undefined)[] }>(
         ['posts'],
         (oldData) => {
@@ -83,7 +72,7 @@ export const useLikePost = () => {
             pages: oldData.pages.map((page) => ({
               ...page,
               data: page.data.map((post) =>
-                post.id === id ? { ...post, likes: post.likes + 1 } : post
+                post.id === id ? { ...post, likes: data.likes } : post
               ),
             })),
           };

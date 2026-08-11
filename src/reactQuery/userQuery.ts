@@ -2,6 +2,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { BASE_URL } from '@/common/const';
 import { throwIfNotOk } from '@/lib/httpError';
+import { queryClient } from '@/lib/queryClient';
 import { LoginParams, UserInfo } from '@/common/types/user';
 
 const loginProcess = async ({ id, password }: LoginParams) => {
@@ -41,6 +42,10 @@ const loginProcess = async ({ id, password }: LoginParams) => {
 export const useLogin = () => {
   return useMutation({
     mutationFn: loginProcess,
+    onSuccess: () => {
+      // 이전 사용자의 캐시(userInfo 등)가 남아있지 않도록 초기화
+      queryClient.clear();
+    },
   });
 };
 
@@ -56,6 +61,13 @@ const logoutProcess = async () => {
 export const useLogout = () => {
   return useMutation({
     mutationFn: logoutProcess,
+    onSuccess: () => {
+      queryClient.clear();
+    },
+    onError: () => {
+      // 로그아웃 요청이 실패해도 클라이언트 캐시는 비워 다음 로그인에 영향 없도록 함
+      queryClient.clear();
+    },
   });
 };
 

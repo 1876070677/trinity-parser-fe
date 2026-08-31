@@ -29,5 +29,5 @@ export interface CurrentGradeInfo {
   centesScorAdm?: string;
   estiYn?: string;
   grdAdm?: string;
-  details: string[];
+  details?: string[];
 }

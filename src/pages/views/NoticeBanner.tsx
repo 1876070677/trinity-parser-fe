@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Megaphone, X } from 'lucide-react';
 
 import { NOTICES } from '@/common/const';
-import { ScrollArea } from '@/components/ui/scroll-area';
 
 const TRUNCATE_LENGTH = 60;
 
@@ -25,7 +24,7 @@ function NoticeBanner() {
   if (notices.length === 0) return null;
 
   return (
-    <div className="shrink-0 px-4 md:px-6 pt-4 space-y-2">
+    <div className="shrink-0 px-4 md:px-6 pt-3 space-y-2">
       {notices.map((notice) => {
         const isLong = notice.content.length > TRUNCATE_LENGTH;
         const isExpanded = expandedIds.includes(notice.id);
@@ -33,43 +32,48 @@ function NoticeBanner() {
         return (
           <div
             key={notice.id}
-            className="relative flex items-start gap-2 bg-blue-50 border border-blue-200 rounded-lg px-4 py-3"
+            className="relative flex items-start gap-3 bg-white/90 backdrop-blur-xl rounded-2xl px-4 py-3 shadow-[0_2px_16px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.05)] transition-all duration-200"
           >
-            <Megaphone className="w-4 h-4 text-blue-600 mt-0.5 shrink-0" />
-            <div className="flex-1 min-w-0">
+            <div className="w-7 h-7 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 mt-0.5">
+              <Megaphone className="w-3.5 h-3.5" />
+            </div>
+
+            <div className="flex-1 min-w-0 pr-6">
               {isExpanded ? (
-                <ScrollArea className="max-h-56 h-56 pr-2" hideScrollbar>
-                  <p className="text-sm text-blue-900 break-words whitespace-pre-line">
+                <div className="max-h-52 overflow-y-auto pr-2">
+                  <p className="text-xs text-gray-800 break-words whitespace-pre-line leading-relaxed">
                     {notice.content}
                   </p>
-                </ScrollArea>
+                </div>
               ) : (
                 <p
-                  className={`text-sm text-blue-900 break-words whitespace-pre-line ${
+                  className={`text-xs text-gray-800 break-words whitespace-pre-line leading-relaxed ${
                     isLong ? 'line-clamp-2' : ''
                   }`}
                 >
                   {notice.content}
                 </p>
               )}
-              <div className="flex items-center gap-2 mt-0.5">
-                <p className="text-xs text-blue-500">{notice.date}</p>
+
+              <div className="flex items-center gap-3 mt-1.5">
+                <span className="text-[10px] font-mono text-gray-400">{notice.date}</span>
                 {isLong && (
                   <button
                     onClick={() => toggleExpand(notice.id)}
-                    className="text-xs text-blue-600 hover:text-blue-800 underline"
+                    className="text-[11px] font-semibold text-[#0071E3] hover:text-blue-700 transition-colors cursor-pointer"
                   >
-                    {isExpanded ? '접기' : '더보기'}
+                    {isExpanded ? '간략히 보기' : '자세히 보기'}
                   </button>
                 )}
               </div>
             </div>
+
             <button
               onClick={() => handleDismiss(notice.id)}
-              className="absolute top-3 right-3 text-blue-400 hover:text-blue-600 shrink-0 cursor-pointer"
+              className="absolute top-3 right-3 w-6 h-6 rounded-full flex items-center justify-center text-gray-300 hover:text-gray-600 hover:bg-black/[0.04] transition-colors cursor-pointer"
               aria-label="공지 닫기"
             >
-              <X className="w-4 h-4" />
+              <X className="w-3.5 h-3.5" />
             </button>
           </div>
         );

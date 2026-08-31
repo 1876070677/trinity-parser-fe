@@ -5,6 +5,9 @@ import path from 'path';
 
 export default defineConfig(({ mode }) => {
   const isDev = mode === 'development';
+  const hasHttpsCert =
+    fs.existsSync('./mkcert/localhost+1-key.pem') &&
+    fs.existsSync('./mkcert/localhost+1.pem');
   return {
     base: '/',
     plugins: [react()],
@@ -15,10 +18,12 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       ...(isDev && {
-        https: {
-          key: fs.readFileSync('./mkcert/localhost+1-key.pem'),
-          cert: fs.readFileSync('./mkcert/localhost+1.pem'),
-        },
+        ...(hasHttpsCert && {
+          https: {
+            key: fs.readFileSync('./mkcert/localhost+1-key.pem'),
+            cert: fs.readFileSync('./mkcert/localhost+1.pem'),
+          },
+        }),
         proxy: {
           '/api': {
             target: 'https://trinity.dobby.kr',

@@ -93,6 +93,22 @@ function Grades() {
                 )}
               </div>
             </div>
+
+            {grade.details && grade.details.length > 0 && (
+              <div className="pt-3 border-t border-gray-200/70">
+                <p className="text-[11px] font-semibold text-gray-500 mb-2">세부 점수</p>
+                <ul className="space-y-1.5">
+                  {grade.details.map((detail, detailIdx) => (
+                    <li
+                      key={detailIdx}
+                      className="text-xs text-gray-600 leading-relaxed"
+                    >
+                      {detail}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         );
       })}

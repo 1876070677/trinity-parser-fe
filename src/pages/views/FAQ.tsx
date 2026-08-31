@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { FAQS } from '@/common/const';
 
-function FAQ() {
+export default function FAQ() {
   const [openId, setOpenId] = useState<number | null>(null);
 
   const toggleFAQ = (id: number) => {
@@ -56,5 +56,3 @@ function FAQ() {
     </div>
   );
 }
-
-export default FAQ;

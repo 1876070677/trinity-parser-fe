@@ -59,4 +59,6 @@ function Button({
   )
 }
 
+// Variant metadata intentionally shares the component module for shadcn composition.
+// eslint-disable-next-line react-refresh/only-export-components
 export { Button, buttonVariants }

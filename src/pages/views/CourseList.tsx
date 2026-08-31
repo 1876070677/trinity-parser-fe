@@ -15,8 +15,6 @@ function CourseList() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { subjects, removeSubject } = useParsingStore();
 
-  console.log(subjects);
-
   // query.
   const { data: userInfo } = useUserInfo();
   const { mutate, isPending } = useSubjectInfo();
@@ -126,7 +124,8 @@ function CourseList() {
             const limit = parseInt(subject.tlsnLmtRcnt || '0', 10);
             const extra = parseInt(subject.extraCnt || '0', 10);
             const percent = limit > 0 ? Math.min(Math.round((applied / limit) * 100), 100) : 0;
-            const isFull = applied >= limit;
+            const hasLimit = limit > 0;
+            const isFull = hasLimit && applied >= limit;
 
             return (
               <div
@@ -190,6 +189,10 @@ function CourseList() {
                       {extra > 0 ? (
                         <span className="text-[11px] font-bold text-rose-600 bg-white px-2.5 py-0.5 rounded-md border border-rose-200/80 shadow-2xs">
                           여석 {extra}석
+                        </span>
+                      ) : !hasLimit ? (
+                        <span className="text-[11px] font-medium text-gray-500 bg-white px-2.5 py-0.5 rounded-md border border-gray-200/60 shadow-2xs">
+                          정원 미확인
                         </span>
                       ) : isFull ? (
                         <span className="text-[11px] font-bold text-rose-600 bg-white px-2.5 py-0.5 rounded-md border border-rose-200/80 shadow-2xs">

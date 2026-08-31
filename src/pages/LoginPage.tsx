@@ -30,21 +30,25 @@ function LoginPage() {
 
     const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
 
+    let animationFrameId: number;
+
     const animate = (currentTime: number) => {
       const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
+      const progress = Math.max(0, Math.min(elapsed / duration, 1));
       const easedProgress = easeOut(progress);
 
       setAnimatedCount(Math.floor(easedProgress * loginCount));
 
       if (progress < 1) {
-        requestAnimationFrame(animate);
+        animationFrameId = requestAnimationFrame(animate);
       } else {
         setAnimatedCount(loginCount);
       }
     };
 
-    requestAnimationFrame(animate);
+    animationFrameId = requestAnimationFrame(animate);
+
+    return () => cancelAnimationFrame(animationFrameId);
   }, [loginCount]);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -74,7 +78,7 @@ function LoginPage() {
             <div className="w-12 h-12 rounded-2xl bg-[#F8F9FA] border border-black/[0.04] text-gray-900 flex items-center justify-center mx-auto shadow-2xs">
               <GraduationCap className="w-6 h-6" />
             </div>
-            
+
             <div>
               <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Trinity Parser</h1>
               <p className="text-xs text-gray-500 mt-1">가톨릭대학교 포털 수강신청 도우미</p>
@@ -143,7 +147,7 @@ function LoginPage() {
           {/* Footer Note */}
           <div className="pt-2 text-center">
             <p className="text-[11px] text-gray-400 leading-relaxed">
-              가톨릭대 종합정보시스템(Trinity) 계정으로<br />안전하게 직접 인증됩니다.
+              입력한 계정 정보는 학교 포털 인증을 위해<br />Trinity Parser 서버로 전송됩니다.
             </p>
           </div>
         </div>

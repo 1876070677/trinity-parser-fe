@@ -3,23 +3,23 @@ import { ChevronDown } from 'lucide-react';
 import { FAQS } from '@/common/const';
 
 export default function FAQ() {
-  const [openId, setOpenId] = useState<number | null>(null);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const toggleFAQ = (id: number) => {
-    setOpenId(openId === id ? null : id);
+    setOpenIndex(openIndex === id ? null : id);
   };
 
   return (
     <div className="space-y-3 p-1 pr-2">
       {FAQS.map((faq, index) => {
-        const isOpen = openId === index;
+        const isOpen = openIndex === index;
         return (
           <div
             key={index}
             className={`rounded-2xl transition-all duration-200 overflow-hidden ${
               isOpen
                 ? 'bg-white shadow-xs border border-gray-200/80'
-                : 'bg-[#F8F9FA] border border-black/[0.04] hover:bg-white shadow-2xs'
+                : 'bg-sub-background border border-black/[0.04] hover:bg-white shadow-2xs'
             }`}
           >
             <button
@@ -45,7 +45,7 @@ export default function FAQ() {
 
             {isOpen && (
               <div className="px-4 pb-4 pt-1 border-t border-gray-100">
-                <p className="text-xs text-gray-700 leading-relaxed break-words whitespace-pre-line bg-[#F8F9FA] p-3.5 rounded-xl font-medium">
+                <p className="text-xs text-gray-700 leading-relaxed break-words whitespace-pre-line bg-sub-background p-3.5 rounded-xl font-medium">
                   {faq.answer}
                 </p>
               </div>

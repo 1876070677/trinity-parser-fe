@@ -12,7 +12,7 @@ function LoginPage() {
   const navigate = useNavigate();
 
   // state.
-  const [email, setEmail] = useState('');
+  const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [animatedCount, setAnimatedCount] = useState(0);
@@ -56,7 +56,7 @@ function LoginPage() {
     setErrorMessage(null);
     
     loginMutation.mutate(
-      { id: email, password },
+      { id, password },
       {
         onSuccess: () => {
           navigate('/dashboard');
@@ -75,7 +75,7 @@ function LoginPage() {
         <div className="bg-white rounded-3xl p-8 sm:p-10 shadow-[0_4px_28px_rgba(0,0,0,0.04)] space-y-6">
           {/* Header */}
           <div className="text-center space-y-3">
-            <div className="w-12 h-12 rounded-2xl bg-[#F8F9FA] border border-black/[0.04] text-gray-900 flex items-center justify-center mx-auto shadow-2xs">
+            <div className="w-12 h-12 rounded-2xl bg-sub-background border border-black/[0.04] text-gray-900 flex items-center justify-center mx-auto shadow-2xs">
               <GraduationCap className="w-6 h-6" />
             </div>
 
@@ -85,7 +85,7 @@ function LoginPage() {
             </div>
 
             {loginCount ? (
-              <div className="inline-flex items-center gap-1.5 text-[11px] font-medium text-gray-600 bg-[#F8F9FA] px-3 py-1 rounded-full border border-black/[0.04]">
+              <div className="inline-flex items-center gap-1.5 text-[11px] font-medium text-gray-600 bg-sub-background px-3 py-1 rounded-full border border-black/[0.04]">
                 <span className="font-bold text-gray-900">{animatedCount.toLocaleString()}명</span>
                 <span>이 선택한 서비스</span>
               </div>
@@ -95,15 +95,15 @@ function LoginPage() {
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4 pt-1">
             {/* ID Input Sub-card */}
-            <div className="bg-[#F8F9FA] border border-black/[0.04] p-3.5 rounded-2xl focus-within:bg-white focus-within:border-gray-300 focus-within:ring-2 focus-within:ring-black/5 focus-within:shadow-xs transition-all duration-200">
-              <Label htmlFor="email" className="block text-[11px] font-semibold text-gray-500 mb-1">
+            <div className="bg-sub-background border border-black/[0.04] p-3.5 rounded-2xl focus-within:bg-white focus-within:border-gray-300 focus-within:ring-2 focus-within:ring-black/5 focus-within:shadow-xs transition-all duration-200">
+              <Label htmlFor="login-id" className="block text-[11px] font-semibold text-gray-500 mb-1">
                 트리니티 아이디
               </Label>
               <Input
-                id="email"
+                id="login-id"
                 type="text"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={id}
+                onChange={(e) => setId(e.target.value)}
                 className="w-full bg-transparent border-none shadow-none text-sm text-gray-900 placeholder:text-gray-400 font-medium focus-visible:ring-0 focus-visible:outline-none p-0 h-auto"
                 placeholder="학번 또는 아이디"
                 required
@@ -111,7 +111,7 @@ function LoginPage() {
             </div>
 
             {/* Password Input Sub-card */}
-            <div className="bg-[#F8F9FA] border border-black/[0.04] p-3.5 rounded-2xl focus-within:bg-white focus-within:border-gray-300 focus-within:ring-2 focus-within:ring-black/5 focus-within:shadow-xs transition-all duration-200">
+            <div className="bg-sub-background border border-black/[0.04] p-3.5 rounded-2xl focus-within:bg-white focus-within:border-gray-300 focus-within:ring-2 focus-within:ring-black/5 focus-within:shadow-xs transition-all duration-200">
               <Label htmlFor="password" className="block text-[11px] font-semibold text-gray-500 mb-1">
                 비밀번호
               </Label>

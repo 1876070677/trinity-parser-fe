@@ -2,7 +2,74 @@ import { useState, useRef, useEffect } from 'react';
 import { Heart, Send } from 'lucide-react';
 
 import { usePosts, useLikePost, useCreatePost } from '@/reactQuery/guestbookQuery';
+import { ListPostsResponseDto } from '@/common/types/board';
 import { cn } from '@/lib/utils';
+
+const MAX_LENGTH = 300;
+
+type Post = ListPostsResponseDto['data'][number];
+
+interface PostCardProps {
+  post: Post;
+  onLike: () => void;
+}
+
+function PostCard({ post, onLike }: PostCardProps) {
+  return (
+    <div className="bg-sub-background border border-black/[0.04] hover:bg-white rounded-2xl p-4 transition-all duration-200 space-y-2.5 shadow-2xs hover:shadow-xs">
+      {/* Header: Avatar, Name, Time */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2.5">
+          <div
+            className={cn(
+              "w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 shadow-2xs",
+              post.isAdmin
+                ? 'bg-gray-900 text-white'
+                : 'bg-white text-gray-700 border border-gray-200/60'
+            )}
+          >
+            {post.isAdmin ? '관리' : '학우'}
+          </div>
+          <div>
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs font-bold text-gray-900">
+                {post.isAdmin ? '관리자' : '익명 학우'}
+              </span>
+              {post.isAdmin && (
+                <span className="text-[10px] font-semibold text-gray-900 bg-white px-1.5 py-0.5 rounded border border-gray-200/60 shadow-2xs">
+                  Admin
+                </span>
+              )}
+            </div>
+            <p className="text-[10px] text-gray-400">
+              {new Date(post.createdAt).toLocaleDateString('ko-KR', {
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+              })}
+            </p>
+          </div>
+        </div>
+
+        {/* Like Button */}
+        <button
+          type="button"
+          onClick={onLike}
+          className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold text-gray-500 bg-white border border-gray-200/60 shadow-2xs hover:text-rose-600 hover:border-rose-200 transition-all cursor-pointer"
+        >
+          <Heart className="w-3.5 h-3.5 text-gray-400 hover:text-rose-500 transition-colors" />
+          <span className="text-[11px] text-gray-700 font-mono">{post.likes}</span>
+        </button>
+      </div>
+
+      {/* Message Body */}
+      <p className="text-xs text-gray-800 leading-relaxed break-words whitespace-pre-line font-medium pl-0.5">
+        {post.content}
+      </p>
+    </div>
+  );
+}
 
 function Guestbook() {
   const [newMessage, setNewMessage] = useState('');
@@ -19,10 +86,6 @@ function Guestbook() {
   const { mutate: likePost } = useLikePost();
   const { mutate: createPost } = useCreatePost();
 
-  const handleLike = (id: string) => {
-    likePost(id);
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newMessage.trim()) return;
@@ -33,7 +96,11 @@ function Guestbook() {
 
   const posts = data?.pages.flatMap((page) => page.data) ?? [];
 
+  // 로딩 중에는 sentinel이 마운트되지 않으므로 isLoading도 의존성에 둔다.
   useEffect(() => {
+    const target = loadMoreRef.current;
+    if (!target) return;
+
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
@@ -42,13 +109,10 @@ function Guestbook() {
       },
       { threshold: 0.1 }
     );
-
-    if (loadMoreRef.current) {
-      observer.observe(loadMoreRef.current);
-    }
+    observer.observe(target);
 
     return () => observer.disconnect();
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+  }, [isLoading, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   if (isLoading) {
     return <div className="text-center py-4">로딩 중...</div>;
@@ -59,19 +123,19 @@ function Guestbook() {
       {/* Integrated Message Input Composer */}
       <form
         onSubmit={handleSubmit}
-        className="shrink-0 bg-[#F8F9FA] border border-black/[0.04] p-3.5 rounded-2xl focus-within:bg-white focus-within:border-gray-300 focus-within:ring-2 focus-within:ring-black/5 focus-within:shadow-xs transition-all duration-200"
+        className="shrink-0 bg-sub-background border border-black/[0.04] p-3.5 rounded-2xl focus-within:bg-white focus-within:border-gray-300 focus-within:ring-2 focus-within:ring-black/5 focus-within:shadow-xs transition-all duration-200"
       >
         <textarea
           value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value.slice(0, 300))}
-          placeholder="따뜻한 응원이나 의견을 남겨주세요... (최대 300자)"
-          maxLength={300}
+          onChange={(e) => setNewMessage(e.target.value.slice(0, MAX_LENGTH))}
+          placeholder={`따뜻한 응원이나 의견을 남겨주세요... (최대 ${MAX_LENGTH}자)`}
+          maxLength={MAX_LENGTH}
           rows={2}
           className="w-full bg-transparent border-none outline-none resize-none text-xs text-gray-800 placeholder-gray-400 focus:ring-0 p-0 leading-relaxed font-medium"
         />
         <div className="flex items-center justify-between pt-2 border-t border-gray-200/60 mt-1.5">
           <span className="text-[11px] font-mono text-gray-400">
-            {newMessage.length} / 300자
+            {newMessage.length} / {MAX_LENGTH}자
           </span>
           <button
             type="submit"
@@ -87,61 +151,7 @@ function Guestbook() {
       {/* Guestbook Feed List (Dedicated Inner Scroll) */}
       <div className="flex-1 min-h-0 overflow-y-auto space-y-3 pr-1">
         {posts.map((post) => (
-          <div
-            key={post.id}
-            className="bg-[#F8F9FA] border border-black/[0.04] hover:bg-white rounded-2xl p-4 transition-all duration-200 space-y-2.5 shadow-2xs hover:shadow-xs"
-          >
-            {/* Header: Avatar, Name, Time */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
-                <div
-                  className={cn(
-                    "w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 shadow-2xs",
-                    post.isAdmin
-                      ? 'bg-gray-900 text-white'
-                      : 'bg-white text-gray-700 border border-gray-200/60'
-                  )}
-                >
-                  {post.isAdmin ? '관리' : '학우'}
-                </div>
-                <div>
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-xs font-bold text-gray-900">
-                      {post.isAdmin ? '관리자' : '익명 학우'}
-                    </span>
-                    {post.isAdmin && (
-                      <span className="text-[10px] font-semibold text-gray-900 bg-white px-1.5 py-0.5 rounded border border-gray-200/60 shadow-2xs">
-                        Admin
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-[10px] text-gray-400">
-                    {new Date(post.createdAt).toLocaleDateString('ko-KR', {
-                      month: 'short',
-                      day: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })}
-                  </p>
-                </div>
-              </div>
-
-              {/* Like Button */}
-              <button
-                type="button"
-                onClick={() => handleLike(post.id)}
-                className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold text-gray-500 bg-white border border-gray-200/60 shadow-2xs hover:text-rose-600 hover:border-rose-200 transition-all cursor-pointer"
-              >
-                <Heart className="w-3.5 h-3.5 text-gray-400 hover:text-rose-500 transition-colors" />
-                <span className="text-[11px] text-gray-700 font-mono">{post.likes}</span>
-              </button>
-            </div>
-
-            {/* Message Body */}
-            <p className="text-xs text-gray-800 leading-relaxed break-words whitespace-pre-line font-medium pl-0.5">
-              {post.content}
-            </p>
-          </div>
+          <PostCard key={post.id} post={post} onLike={() => likePost(post.id)} />
         ))}
 
         <div ref={loadMoreRef} className="h-1" />

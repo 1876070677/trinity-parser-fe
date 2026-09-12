@@ -53,6 +53,7 @@ body {
   --color-sidebar-ring: var(--sidebar-ring);
   --color-main-background: var(--main-background);
   --color-main-foreground: var(--main-foreground);
+  --color-sub-background: var(--sub-background);
 }
 
 :root {
@@ -90,6 +91,7 @@ body {
   --sidebar-ring: oklch(0.704 0.04 256.788);
   --main-background: #F5F5F7;
   --main-foreground: #1D1D1F;
+  --sub-background: #F8F9FA;
 }
 
 .dark {

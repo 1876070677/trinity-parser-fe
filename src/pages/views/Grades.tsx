@@ -45,7 +45,7 @@ function Grades() {
   return (
     <div className="space-y-3 p-1 pr-2">
       {/* Grade Summary Header */}
-      <div className="flex items-center justify-between px-3.5 py-2.5 bg-[#F8F9FA] border border-black/[0.04] rounded-xl">
+      <div className="flex items-center justify-between px-3.5 py-2.5 bg-sub-background border border-black/[0.04] rounded-xl">
         <span className="text-xs font-medium text-gray-600">
           이번 학기 수강 성적
         </span>
@@ -62,7 +62,7 @@ function Grades() {
         return (
           <div
             key={grade.sbjtNo ?? idx}
-            className="bg-[#F8F9FA] border border-black/[0.04] hover:bg-white rounded-2xl p-4 transition-all duration-200 space-y-3 shadow-2xs hover:shadow-xs"
+            className="bg-sub-background border border-black/[0.04] hover:bg-white rounded-2xl p-4 transition-all duration-200 space-y-3 shadow-2xs hover:shadow-xs"
           >
             <div className="flex items-center justify-between">
               <div>

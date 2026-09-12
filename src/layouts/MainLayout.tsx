@@ -4,11 +4,10 @@ import { BookOpen, FolderOpen, LogOut, Menu, Users, X, type LucideProps } from '
 
 import { useLogout, useUserInfo } from '@/reactQuery/userQuery';
 
-// 데스크톱 네비에서 대시보드만 아이콘이 없는 것은 현재 디자인을 그대로 옮긴 것이다.
-const NAV_ITEMS: { to: string; label: string; icon: ComponentType<LucideProps>; desktopIcon: boolean }[] = [
-  { to: '/dashboard', label: '대시보드', icon: BookOpen, desktopIcon: false },
-  { to: '/about', label: 'About', icon: Users, desktopIcon: true },
-  { to: '/archive', label: 'Archive', icon: FolderOpen, desktopIcon: true },
+const NAV_ITEMS: { to: string; label: string; icon: ComponentType<LucideProps> }[] = [
+  { to: '/dashboard', label: '대시보드', icon: BookOpen },
+  { to: '/about', label: 'About', icon: Users },
+  { to: '/archive', label: 'Archive', icon: FolderOpen },
 ];
 
 const activeClass = (isActive: boolean) =>
@@ -44,7 +43,7 @@ function MainLayout() {
               </div>
 
               <nav className="hidden lg:flex items-center gap-1 ml-6">
-                {NAV_ITEMS.map(({ to, label, icon: Icon, desktopIcon }) => (
+                {NAV_ITEMS.map(({ to, label, icon: Icon }) => (
                   <NavLink
                     key={to}
                     to={to}
@@ -52,7 +51,7 @@ function MainLayout() {
                       `px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${activeClass(isActive)}`
                     }
                   >
-                    {desktopIcon && <Icon className="w-4 h-4" />}
+                    <Icon className="w-4 h-4" />
                     {label}
                   </NavLink>
                 ))}

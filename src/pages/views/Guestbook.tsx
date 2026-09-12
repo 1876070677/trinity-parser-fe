@@ -137,7 +137,14 @@ function Guestbook() {
   }, [isLoading, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   if (isLoading) {
-    return <div className="text-center py-4">로딩 중...</div>;
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="text-center space-y-2">
+          <div className="w-8 h-8 rounded-full border-2 border-gray-900 border-t-transparent animate-spin mx-auto"></div>
+          <p className="text-xs text-gray-400 font-medium">방명록을 불러오는 중...</p>
+        </div>
+      </div>
+    );
   }
 
   return (

@@ -171,7 +171,7 @@ function CourseList() {
           />
           <div className="w-[1px] h-4 bg-gray-200"></div>
           <Input
-            placeholder="분반 (01)"
+            placeholder="분반"
             value={classNo}
             onChange={(e) => setClassNo(e.target.value)}
             className="w-20 bg-transparent border-none shadow-none text-xs focus-visible:ring-0 focus-visible:outline-none placeholder:text-gray-400 h-9 font-medium"

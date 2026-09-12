@@ -3,6 +3,7 @@ import { User, RefreshCw, Trash2 } from 'lucide-react';
 
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import { useUserInfo } from '@/reactQuery/userQuery';
 import { useSubjectInfo } from '@/reactQuery/parsingQuery';
 import { useParsingStore } from '@/zustand/parsingStore';
@@ -54,21 +55,25 @@ function CourseCard({ subject, isRefreshing, onRefresh, onRemove }: CourseCardPr
 
         {/* Actions */}
         <div className="flex items-center gap-1.5">
-          <button
-            onClick={onRefresh}
-            disabled={isRefreshing}
-            className="w-8 h-8 rounded-lg bg-white border border-gray-200/60 shadow-2xs flex items-center justify-center text-gray-500 hover:text-gray-900 hover:bg-gray-50 active:scale-95 transition-all"
-            title="새로고침"
-          >
-            <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-gray-900' : ''}`} />
-          </button>
-          <button
-            onClick={onRemove}
-            className="w-8 h-8 rounded-lg bg-white border border-gray-200/60 shadow-2xs flex items-center justify-center text-gray-500 hover:text-rose-600 hover:bg-rose-50 active:scale-95 transition-all"
-            title="삭제"
-          >
-            <Trash2 className="w-3.5 h-3.5" />
-          </button>
+          <Tooltip>
+            <TooltipTrigger
+              onClick={onRefresh}
+              disabled={isRefreshing}
+              className="w-8 h-8 rounded-lg bg-white border border-gray-200/60 shadow-2xs flex items-center justify-center text-gray-500 hover:text-gray-900 hover:bg-gray-50 active:scale-95 transition-all"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-gray-900' : ''}`} />
+            </TooltipTrigger>
+            <TooltipContent>새로고침</TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger
+              onClick={onRemove}
+              className="w-8 h-8 rounded-lg bg-white border border-gray-200/60 shadow-2xs flex items-center justify-center text-gray-500 hover:text-rose-600 hover:bg-rose-50 active:scale-95 transition-all"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+            </TooltipTrigger>
+            <TooltipContent>삭제</TooltipContent>
+          </Tooltip>
         </div>
       </div>
 

@@ -4,6 +4,7 @@ import { Heart, Send } from 'lucide-react';
 import { usePosts, useLikePost, useCreatePost, getLikedPostIds } from '@/reactQuery/guestbookQuery';
 import { ListPostsResponseDto } from '@/common/types/board';
 import { cn } from '@/lib/utils';
+import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 
 const MAX_LENGTH = 300;
 
@@ -54,27 +55,29 @@ function PostCard({ post, isLiked, onLike }: PostCardProps) {
         </div>
 
         {/* Like Button */}
-        <button
-          type="button"
-          onClick={onLike}
-          disabled={isLiked}
-          aria-pressed={isLiked}
-          title={isLiked ? '이미 좋아요한 글입니다' : '좋아요'}
-          className={cn(
-            'flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-white border shadow-2xs transition-all',
-            isLiked
-              ? 'text-rose-600 border-rose-200 cursor-default'
-              : 'text-gray-500 border-gray-200/60 hover:text-rose-600 hover:border-rose-200 cursor-pointer'
-          )}
-        >
-          <Heart
+        <Tooltip>
+          <TooltipTrigger
+            type="button"
+            onClick={onLike}
+            aria-pressed={isLiked}
+            aria-disabled={isLiked}
             className={cn(
-              'w-3.5 h-3.5 transition-colors',
-              isLiked ? 'text-rose-500 fill-rose-500' : 'text-gray-400 hover:text-rose-500'
+              'flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-white border shadow-2xs transition-all',
+              isLiked
+                ? 'text-rose-600 border-rose-200 cursor-default'
+                : 'text-gray-500 border-gray-200/60 hover:text-rose-600 hover:border-rose-200 cursor-pointer'
             )}
-          />
-          <span className="text-[11px] text-gray-700 font-mono">{post.likes}</span>
-        </button>
+          >
+            <Heart
+              className={cn(
+                'w-3.5 h-3.5 transition-colors',
+                isLiked ? 'text-rose-500 fill-rose-500' : 'text-gray-400 hover:text-rose-500'
+              )}
+            />
+            <span className="text-[11px] text-gray-700 font-mono">{post.likes}</span>
+          </TooltipTrigger>
+          <TooltipContent>{isLiked ? '이미 좋아요한 글입니다' : '좋아요'}</TooltipContent>
+        </Tooltip>
       </div>
 
       {/* Message Body */}

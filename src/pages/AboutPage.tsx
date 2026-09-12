@@ -1,6 +1,7 @@
 import { Github, ExternalLink, Newspaper } from "lucide-react";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import { useContributors } from "@/reactQuery/contributorQuery";
 import { ContributorRole } from "@/common/types/contributor";
 import { extractGithubUsername, getGithubAvatarUrl } from "@/lib/github";
@@ -73,52 +74,32 @@ function AboutPage() {
         <ArticleCard />
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {owners.map((owner) => {
-            const githubUrl = extractGithubUsername(owner.description)
-              ? `https://github.com/${extractGithubUsername(owner.description)}`
-              : null;
-
-            return (
-              <div
-                key={owner.id}
-                className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow"
-              >
-                <div className="md:aspect-square overflow-hidden bg-white">
-                  {owner.imgUrl && (
-                    <img
-                      src={owner.imgUrl}
-                      alt={owner.name}
-                      className="w-full h-full object-contain"
-                    />
-                  )}
-                </div>
-
-                <div className="p-6">
-                  <div className="text-xl text-gray-900 mb-1">{owner.name}</div>
-                  {owner.part && <p className="text-sm text-blue-600 mb-3">{owner.part}</p>}
-                  {owner.description && (
-                    <p className="text-gray-600 text-sm mb-4 leading-relaxed break-keep">
-                      {owner.description}
-                    </p>
-                  )}
-
-                  {githubUrl && (
-                    <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
-                      <a
-                        href={githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-gray-500 hover:text-blue-600 transition-colors"
-                        title="GitHub"
-                      >
-                        <Github className="w-5 h-5" />
-                      </a>
-                    </div>
-                  )}
-                </div>
+          {owners.map((owner) => (
+            <div
+              key={owner.id}
+              className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow"
+            >
+              <div className="md:aspect-square overflow-hidden bg-white">
+                {owner.imgUrl && (
+                  <img
+                    src={owner.imgUrl}
+                    alt={owner.name}
+                    className="w-full h-full object-contain"
+                  />
+                )}
               </div>
-            );
-          })}
+
+              <div className="p-6">
+                <div className="text-xl text-gray-900 mb-1">{owner.name}</div>
+                {owner.part && <p className="text-sm text-blue-600 mb-3">{owner.part}</p>}
+                {owner.description && (
+                  <p className="text-gray-600 text-sm mb-4 leading-relaxed break-keep">
+                    {owner.description}
+                  </p>
+                )}
+              </div>
+            </div>
+          ))}
         </div>
 
         {communityContributors.length > 0 && (
@@ -147,20 +128,25 @@ function AboutPage() {
                 }
 
                 return (
-                  <a
-                    key={contributor.id}
-                    href={`https://github.com/${username}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title={contributor.name}
-                    className="group"
-                  >
-                    <img
-                      src={getGithubAvatarUrl(username, 112)}
-                      alt={contributor.name}
-                      className="w-14 h-14 rounded-full object-cover border border-gray-200 group-hover:border-blue-400 group-hover:shadow-md transition-all"
+                  <Tooltip key={contributor.id}>
+                    <TooltipTrigger
+                      render={
+                        <a
+                          href={`https://github.com/${username}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="group"
+                        >
+                          <img
+                            src={getGithubAvatarUrl(username, 112)}
+                            alt={contributor.name}
+                            className="w-14 h-14 rounded-full object-cover border border-gray-200 group-hover:border-blue-400 group-hover:shadow-md transition-all"
+                          />
+                        </a>
+                      }
                     />
-                  </a>
+                    <TooltipContent>{contributor.name}</TooltipContent>
+                  </Tooltip>
                 );
               })}
             </div>

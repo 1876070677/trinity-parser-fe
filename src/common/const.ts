@@ -48,33 +48,6 @@ export const FAQS = [
     }
 ];
 
-export const TEAM_MEMBERS = [
-  {
-    id: 1,
-    name: '김시현',
-    role: 'Fullstack Engineer',
-    description: '확장성과 안정성 고려한 시스템을 설계하고 만들어 내는 것을 좋아하는 개발자 김시현입니다.',
-    image: 'Sihyun_profile.jpg',
-    github: 'https://github.com/1876070677',
-  },
-  {
-    id: 2,
-    name: '김상연',
-    role: 'Frontend Developer',
-    description: '사용자 중심의 웹 애플리케이션 개발을 위해 소통하는 프론트엔드 개발자 김상연입니다.',
-    image: '',
-    github: 'https://github.com/KECO-00',
-  },
-  {
-    id: 3,
-    name: '정지원',
-    role: 'Frontend Developer & UI/UX Designer',
-    description: '사용자 중심의 디자인으로 직관적인 인터페이스를 만들기 위해 노력하는 개발자 정지원입니다.',
-    image: 'Jiwon_profile.jpg',
-    github: 'https://github.com/Stopone02',
-  },
-];
-
 export const WEBSITES = [
   {
     id: 1,

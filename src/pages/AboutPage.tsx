@@ -1,6 +1,11 @@
-import { TEAM_MEMBERS } from "@/common/const";
 import { Github, ExternalLink, Newspaper } from "lucide-react";
+
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useContributors } from "@/reactQuery/contributorQuery";
+import { ContributorRole } from "@/common/types/contributor";
+import { extractGithubUsername, getGithubAvatarUrl } from "@/lib/github";
+
+const OWNER_ORDER = ["김시현", "정지원", "김상연"];
 
 const ARTICLE_INFO = {
   url: "http://www.cukjournal.com/news/articleView.html?idxno=4652",
@@ -46,57 +51,121 @@ function ArticleCard() {
 }
 
 function AboutPage() {
+  const { data: contributors } = useContributors();
+
+  const owners = (contributors?.filter((c) => c.role === ContributorRole.OWNER) ?? [])
+    .slice()
+    .sort((a, b) => OWNER_ORDER.indexOf(a.name) - OWNER_ORDER.indexOf(b.name));
+  const communityContributors =
+    contributors?.filter((c) => c.role === ContributorRole.CONTRIBUTOR) ?? [];
+
   return (
     <ScrollArea className="h-full">
       <div className="max-w-6xl mx-auto p-6">
         <div className="text-center mb-8">
           <div className="text-3xl text-gray-900 mb-4">팀 소개</div>
-          <p className="text-gray-600 max-w-2xl mx-auto break-keep">
+          <div className="text-gray-600 max-w-2xl mx-auto break-keep">
             <div>Trinity Parser를 개발하고 있는 우리 팀을 소개합니다.</div>
             <div>각자의 전문성을 살려 최고의 사용자 경험을 제공하기 위해 노력하고 있습니다.</div>
-          </p>
+          </div>
         </div>
 
         <ArticleCard />
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {TEAM_MEMBERS.map((member) => (
-            <div
-              key={member.id}
-              className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow"
-            >
-              <div className="md:aspect-square overflow-hidden bg-gradient-to-br from-gray-200 to-gray-400">
-                {member.image && (
-                  <img
-                    src={member.image}
-                    alt={member.name}
-                    className="w-full object-contain md:h-full md:object-cover"
-                  />
-                )}
-              </div>
+          {owners.map((owner) => {
+            const githubUrl = extractGithubUsername(owner.description)
+              ? `https://github.com/${extractGithubUsername(owner.description)}`
+              : null;
 
-              <div className="p-6">
-                <div className="text-xl text-gray-900 mb-1">{member.name}</div>
-                <p className="text-sm text-blue-600 mb-3">{member.role}</p>
-                <p className="text-gray-600 text-sm mb-4 leading-relaxed break-keep">
-                  {member.description}
-                </p>
+            return (
+              <div
+                key={owner.id}
+                className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow"
+              >
+                <div className="md:aspect-square overflow-hidden bg-white">
+                  {owner.imgUrl && (
+                    <img
+                      src={owner.imgUrl}
+                      alt={owner.name}
+                      className="w-full h-full object-contain"
+                    />
+                  )}
+                </div>
 
-                <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
-                  <a
-                    href={member.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-gray-500 hover:text-blue-600 transition-colors"
-                    title="GitHub"
-                  >
-                    <Github className="w-5 h-5" />
-                  </a>
+                <div className="p-6">
+                  <div className="text-xl text-gray-900 mb-1">{owner.name}</div>
+                  {owner.part && <p className="text-sm text-blue-600 mb-3">{owner.part}</p>}
+                  {owner.description && (
+                    <p className="text-gray-600 text-sm mb-4 leading-relaxed break-keep">
+                      {owner.description}
+                    </p>
+                  )}
+
+                  {githubUrl && (
+                    <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
+                      <a
+                        href={githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gray-500 hover:text-blue-600 transition-colors"
+                        title="GitHub"
+                      >
+                        <Github className="w-5 h-5" />
+                      </a>
+                    </div>
+                  )}
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
+
+        {communityContributors.length > 0 && (
+          <div className="mt-16">
+            <hr className="border-gray-200 mb-8" />
+            <div className="text-center mb-6">
+              <div className="text-xl text-gray-900 mb-1">Contributors</div>
+              <p className="text-sm text-gray-500">
+                Trinity Parser에 기여해주신 분들입니다.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap justify-center gap-4">
+              {communityContributors.map((contributor) => {
+                const username = extractGithubUsername(contributor.description);
+
+                if (!username) {
+                  return (
+                    <div key={contributor.id} className="flex flex-col items-center gap-1 w-16">
+                      <div className="w-14 h-14 rounded-full bg-gray-200 flex items-center justify-center text-gray-500">
+                        <Github className="w-6 h-6" />
+                      </div>
+                      <span className="text-xs text-gray-500 text-center">{contributor.name}</span>
+                    </div>
+                  );
+                }
+
+                return (
+                  <a
+                    key={contributor.id}
+                    href={`https://github.com/${username}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title={contributor.name}
+                    className="group"
+                  >
+                    <img
+                      src={getGithubAvatarUrl(username, 112)}
+                      alt={contributor.name}
+                      className="w-14 h-14 rounded-full object-cover border border-gray-200 group-hover:border-blue-400 group-hover:shadow-md transition-all"
+                    />
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </div>
     </ScrollArea>
   );

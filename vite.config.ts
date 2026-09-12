@@ -29,6 +29,11 @@ export default defineConfig(({ mode }) => {
             target: 'https://trinity.dobby.kr',
             changeOrigin: true,
             secure: false,
+          },
+          '/uploads': {
+            target: 'https://trinity.dobby.kr',
+            changeOrigin: true,
+            secure: false,
           }
         }
       })

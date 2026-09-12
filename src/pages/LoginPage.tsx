@@ -69,7 +69,7 @@ function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F5F7] flex flex-col items-center justify-center p-4 selection:bg-gray-900 selection:text-white">
+    <div className="min-h-screen bg-main-background flex flex-col items-center justify-center p-4 selection:bg-gray-900 selection:text-white">
       <div className="max-w-[400px] w-full">
         {/* Main Elevated White Card */}
         <div className="bg-white rounded-3xl p-8 sm:p-10 shadow-[0_4px_28px_rgba(0,0,0,0.04)] space-y-6">

@@ -19,7 +19,7 @@ function DashboardPage() {
   const [activeTab, setActiveTab] = useState('courses');
 
   return (
-    <div className="flex-1 flex flex-col bg-[#F5F5F7]">
+    <div className="flex-1 flex flex-col bg-main-background">
       <NoticeBanner />
 
       {/* Mobile Tab Bar */}

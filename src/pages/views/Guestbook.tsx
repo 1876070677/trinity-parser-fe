@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Heart, Send } from 'lucide-react';
 
-import { usePosts, useLikePost, useCreatePost } from '@/reactQuery/guestbookQuery';
+import { usePosts, useLikePost, useCreatePost, getLikedPostIds } from '@/reactQuery/guestbookQuery';
 import { ListPostsResponseDto } from '@/common/types/board';
 import { cn } from '@/lib/utils';
 
@@ -11,10 +11,11 @@ type Post = ListPostsResponseDto['data'][number];
 
 interface PostCardProps {
   post: Post;
+  isLiked: boolean;
   onLike: () => void;
 }
 
-function PostCard({ post, onLike }: PostCardProps) {
+function PostCard({ post, isLiked, onLike }: PostCardProps) {
   return (
     <div className="bg-sub-background border border-black/[0.04] hover:bg-white rounded-2xl p-4 transition-all duration-200 space-y-2.5 shadow-2xs hover:shadow-xs">
       {/* Header: Avatar, Name, Time */}
@@ -56,9 +57,22 @@ function PostCard({ post, onLike }: PostCardProps) {
         <button
           type="button"
           onClick={onLike}
-          className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold text-gray-500 bg-white border border-gray-200/60 shadow-2xs hover:text-rose-600 hover:border-rose-200 transition-all cursor-pointer"
+          disabled={isLiked}
+          aria-pressed={isLiked}
+          title={isLiked ? '이미 좋아요한 글입니다' : '좋아요'}
+          className={cn(
+            'flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-white border shadow-2xs transition-all',
+            isLiked
+              ? 'text-rose-600 border-rose-200 cursor-default'
+              : 'text-gray-500 border-gray-200/60 hover:text-rose-600 hover:border-rose-200 cursor-pointer'
+          )}
         >
-          <Heart className="w-3.5 h-3.5 text-gray-400 hover:text-rose-500 transition-colors" />
+          <Heart
+            className={cn(
+              'w-3.5 h-3.5 transition-colors',
+              isLiked ? 'text-rose-500 fill-rose-500' : 'text-gray-400 hover:text-rose-500'
+            )}
+          />
           <span className="text-[11px] text-gray-700 font-mono">{post.likes}</span>
         </button>
       </div>
@@ -73,6 +87,7 @@ function PostCard({ post, onLike }: PostCardProps) {
 
 function Guestbook() {
   const [newMessage, setNewMessage] = useState('');
+  const [likedIds, setLikedIds] = useState(getLikedPostIds);
   const loadMoreRef = useRef<HTMLDivElement>(null);
 
   const {
@@ -85,6 +100,13 @@ function Guestbook() {
 
   const { mutate: likePost } = useLikePost();
   const { mutate: createPost } = useCreatePost();
+
+  const handleLike = (id: string) => {
+    if (likedIds.has(id)) return;
+    likePost(id, {
+      onSuccess: () => setLikedIds((prev) => new Set(prev).add(id)),
+    });
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -151,7 +173,12 @@ function Guestbook() {
       {/* Guestbook Feed List (Dedicated Inner Scroll) */}
       <div className="flex-1 min-h-0 overflow-y-auto space-y-3 pr-1">
         {posts.map((post) => (
-          <PostCard key={post.id} post={post} onLike={() => likePost(post.id)} />
+          <PostCard
+            key={post.id}
+            post={post}
+            isLiked={likedIds.has(post.id)}
+            onLike={() => handleLike(post.id)}
+          />
         ))}
 
         <div ref={loadMoreRef} className="h-1" />

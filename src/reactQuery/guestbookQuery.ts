@@ -14,6 +14,29 @@ interface LikePostResponseDto {
   likes: number;
 }
 
+// 좋아요 중복 방지는 클라이언트 기억에 의존한다 — 서버는 누가 눌렀는지 저장하지 않기 때문이다.
+// 브라우저를 바꾸거나 저장소를 지우면 다시 누를 수 있다.
+const LIKED_POSTS_KEY = 'likedPostIds';
+
+export const getLikedPostIds = (): Set<string> => {
+  try {
+    const raw = localStorage.getItem(LIKED_POSTS_KEY);
+    return new Set(raw ? (JSON.parse(raw) as string[]) : []);
+  } catch {
+    return new Set();
+  }
+};
+
+const rememberLikedPost = (id: string) => {
+  const ids = getLikedPostIds();
+  ids.add(id);
+  try {
+    localStorage.setItem(LIKED_POSTS_KEY, JSON.stringify([...ids]));
+  } catch {
+    // 저장 실패는 무시한다 — 이번 세션의 likedIds 상태만으로도 중복 클릭은 막힌다.
+  }
+};
+
 const fetchPosts = async (cursor?: string): Promise<ListPostsResponseDto> => {
   const url = cursor
     ? `${BASE_URL}/api/vl/post?cursor=${cursor}`
@@ -62,6 +85,7 @@ export const useLikePost = () => {
   return useMutation({
     mutationFn: likePost,
     onSuccess: (data, id) => {
+      rememberLikedPost(id);
       queryClient.setQueryData<{ pages: ListPostsResponseDto[]; pageParams: (string | undefined)[] }>(
         ['posts'],
         (oldData) => {

@@ -14,8 +14,8 @@ interface LikePostResponseDto {
   likes: number;
 }
 
-// 좋아요 중복 방지는 클라이언트 기억에 의존한다 — 서버가 클릭마다 카운트를 올리기 때문이다.
-// 브라우저를 바꾸거나 저장소를 지우면 다시 누를 수 있다. 서버가 '이미 좋아요' 여부를 내려주면 이 저장소는 그 값으로 대체한다.
+// 좋아요 중복 방지는 클라이언트 기억에 의존한다 — 서버는 누가 눌렀는지 저장하지 않기 때문이다.
+// 브라우저를 바꾸거나 저장소를 지우면 다시 누를 수 있다.
 const LIKED_POSTS_KEY = 'likedPostIds';
 
 export const getLikedPostIds = (): Set<string> => {
@@ -30,7 +30,11 @@ export const getLikedPostIds = (): Set<string> => {
 const rememberLikedPost = (id: string) => {
   const ids = getLikedPostIds();
   ids.add(id);
-  localStorage.setItem(LIKED_POSTS_KEY, JSON.stringify([...ids]));
+  try {
+    localStorage.setItem(LIKED_POSTS_KEY, JSON.stringify([...ids]));
+  } catch {
+    // 저장 실패는 무시한다 — 이번 세션의 likedIds 상태만으로도 중복 클릭은 막힌다.
+  }
 };
 
 const fetchPosts = async (cursor?: string): Promise<ListPostsResponseDto> => {
